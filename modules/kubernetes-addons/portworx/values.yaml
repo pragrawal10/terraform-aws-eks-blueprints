@@ -49,7 +49,7 @@ miscArgs: none                        # Miscellaneous arguments that will be pas
 disableStorageClass: false            # Instructs Operator to not install the default Portworx StorageClasses.
 
 stork: true                           # Use Stork https://docs.portworx.com/scheduler/kubernetes/stork.html for hyperconvergence.
-storkVersion: 2.11.1                       # Optional: version of Stork. For eg: 2.7.0, when it's empty Portworx operator will pick up
+storkVersion: 2.11.0                       # Optional: version of Stork. For eg: 2.7.0, when it's empty Portworx operator will pick up
                                       # version according to Portworx version.
 
 storkSpec:                            # Optional Stork configurations
