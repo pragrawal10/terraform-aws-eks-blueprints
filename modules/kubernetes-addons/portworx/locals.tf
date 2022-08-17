@@ -50,6 +50,7 @@ locals {
         maxStorageNodesPerZone      = 3 
         envVars                     = ""
         eksServiceAccount           = "${local.name}-sa"
+        imageVersion                = "2.11.0"
     },var.chart_values)
   )]
 }
