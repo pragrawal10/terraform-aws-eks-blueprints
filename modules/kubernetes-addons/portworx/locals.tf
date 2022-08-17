@@ -32,7 +32,7 @@ locals {
   irsa_config = {
     create_kubernetes_namespace = false
     kubernetes_namespace        = local.namespace
-    create_kubernetes_service_account = false   #Needs to be True if required access for portworx is given through Service Accounts
+    create_kubernetes_service_account = true
     kubernetes_service_account        = "${local.name}-sa"
     # irsa_iam_policies = concat([aws_iam_policy.pradyuman_policy_one.arn], var.irsa_policies)
   }
