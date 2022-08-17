@@ -42,9 +42,7 @@ locals {
     serviceAccountName = local.name
   }
 
-  default_helm_values = [templatefile("${path.module}/values.yaml", merge(
-    var.chart_values,
-    {
+  default_helm_values = [templatefile("${path.module}/values.yaml", merge({
         clusterName                 = "mycluster"      
         useInternalKVDB             = true
         drives                      = "type=gp2,size=200"  
@@ -52,7 +50,7 @@ locals {
         maxStorageNodesPerZone      = 3 
         envVars                     = ""
         eksServiceAccount           = "${local.name}-sa"
-    })
+    },var.chart_values)
   )]
 }
 
