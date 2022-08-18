@@ -42,13 +42,27 @@ locals {
     serviceAccountName = local.service_account_name
   }
 
-  default_helm_values = [templatefile("${path.module}/values.yaml", merge({
+   default_helm_values = [templatefile("${path.module}/values.yaml", merge({
+        imageVersion                = "2.11.0"
         clusterName                 = "mycluster"      
-        useInternalKVDB             = true
         drives                      = "type=gp2,size=200"  
+        useInternalKVDB             = true
         kvdbDevice                  = "type=gp2,size=150"
-        maxStorageNodesPerZone      = 3 
         envVars                     = ""
+        maxStorageNodesPerZone      = 3 
+        useOpenshiftInstall         = false
+        etcdEndPoint                = ""
+        dataInterface               = ""
+        managementInterface         = ""
+        useStork                    = true
+        storkVersion                = "2.11.0"
+        customRegistryURL           = ""
+        registrySecret              = ""
+        licenseSecret               = ""
+        monitoring                  = false
+        enableCSI                   = false
+        enableAutopilot             = false
+        KVDBauthSecretName          = ""
         eksServiceAccount           = "${local.service_account_name}"
     },var.chart_values)
   )]
