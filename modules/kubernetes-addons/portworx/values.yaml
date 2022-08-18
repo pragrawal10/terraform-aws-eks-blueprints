@@ -4,14 +4,14 @@ deployOperator: true                    # Deploy the Portworx operator
 deployCluster: true                     # Deploy the Portworx cluster
 
 imageVersion: ${imageVersion}               # Version of the PX Image.
-pxOperatorImageVersion: 1.9.0-rc1       # Version of the PX operator image.
+pxOperatorImageVersion: 1.9.0       # Version of the PX operator image.
 
-openshiftInstall: false                 # Defaults to false for installing Portworx on Openshift .
+openshiftInstall: ${useOpenshiftInstall}                 # Defaults to false for installing Portworx on Openshift .
 isTargetOSCoreOS: false                 # Is your target OS CoreOS? Defaults to false.
 pksInstall: false                       # installation on PKS (Pivotal Container Service)
 EKSInstall: true                        # installation on EKS.
 AKSInstall: false                      # installation on AKS
-etcdEndPoint:                         # The ETCD endpoint. Should be in the format etcd:http://<your-etcd-endpoint>:2379. If there are multiple etcd endpoints they need to be ";" seperated.
+etcdEndPoint:  ${etcdEndPoint}        # The ETCD endpoint. Should be in the format etcd:http://<your-etcd-endpoint>:2379. If there are multiple etcd endpoints they need to be ";" seperated.
                                       # the default value is empty since it requires to be explicity set using either the --set option of -f values.yaml.
 clusterName: ${clusterName}             # This is the default. please change it to your cluster name.
 usefileSystemDrive: false             # true/false Instructs PX to use an unmounted Drive even if it has a filesystem.
@@ -48,23 +48,23 @@ miscArgs: none                        # Miscellaneous arguments that will be pas
 
 disableStorageClass: false            # Instructs Operator to not install the default Portworx StorageClasses.
 
-stork: true                           # Use Stork https://docs.portworx.com/scheduler/kubernetes/stork.html for hyperconvergence.
-storkVersion: 2.11.0                       # Optional: version of Stork. For eg: 2.7.0, when it's empty Portworx operator will pick up
+stork: ${useStork}                           # Use Stork https://docs.portworx.com/scheduler/kubernetes/stork.html for hyperconvergence.
+storkVersion: ${storkVersion}                       # Optional: version of Stork. For eg: 2.7.0, when it's empty Portworx operator will pick up
                                       # version according to Portworx version.
 
 storkSpec:                            # Optional Stork configurations
   args:                               # Pass arguments to Stork container. Example: verbose='true';webhook-controller='false'
   volumes:                            # Add volumes to Stork container. Refer the top level volumes for schema.
 
-customRegistryURL:
-registrySecret:
-licenseSecret:
+customRegistryURL: ${customRegistryURL}       #Url wherre to pull Portworx image from
+registrySecret: ${registrySecret}         #Image registery credentials to pull Portworx Images from a secure registry
+licenseSecret:  ${licenseSecret}         #Kubernetes secret name that has Portworx licensing information
 
-monitoring: false
+monitoring: ${monitoring}
 
 deployOnMaster:  false                # For POC only
-csi: false                            # Enable CSI
-aut: false                            # Enable AutoPilot
+csi: ${enableCSI}                     # Enable CSI
+aut: ${enableAutopilot}               # Enable AutoPilot
 
 
 internalKVDB: ${useInternalKVDB}      # internal KVDB
@@ -81,7 +81,7 @@ consul:                               # DEPRECATED: Use kvdb.authSecretName for 
   token: none                         # ACL token value used for Consul authentication. (example: 398073a8-5091-4d9c-871a-bbbeb030d1f6)
 
 kvdb:
-  authSecretName: none                # Refer https://docs.portworx.com/reference/etcd/#securing-with-certificates-in-kubernetes to
+  authSecretName: ${KVDBauthSecretName}    # Refer https://docs.portworx.com/reference/etcd/#securing-with-certificates-in-kubernetes to
                                       # create a kvdb secret and specify the name of the secret here
 
 volumes:                              # Add volumes to Portworx container. Supported volume types: Host, Secret, ConfigMap

@@ -1,7 +1,7 @@
 locals {
   name                 = "portworx"
   namespace            = "kube-system"
-  service_account_name = ""
+  service_account_name = "${local.name}-sa"
 
   set_values = try(length(var.aws_access_key_id) > 0, false) ? concat([
       {
@@ -32,14 +32,14 @@ locals {
   irsa_config = {
     create_kubernetes_namespace = false
     kubernetes_namespace        = local.namespace
-    create_kubernetes_service_account = true
-    kubernetes_service_account        = "${local.name}-sa"
+    create_kubernetes_service_account = true  
+    kubernetes_service_account        = "${local.service_account_name}"
     # irsa_iam_policies = concat([aws_iam_policy.pradyuman_policy_one.arn], var.irsa_policies)
   }
 
   argocd_gitops_config = {
     enable             = false
-    serviceAccountName = local.name
+    serviceAccountName = local.service_account_name
   }
 
   default_helm_values = [templatefile("${path.module}/values.yaml", merge({
@@ -49,10 +49,7 @@ locals {
         kvdbDevice                  = "type=gp2,size=150"
         maxStorageNodesPerZone      = 3 
         envVars                     = ""
-        eksServiceAccount           = "${local.name}-sa"
-        imageVersion                = "2.11.0"
+        eksServiceAccount           = "${local.service_account_name}"
     },var.chart_values)
   )]
 }
-
-
