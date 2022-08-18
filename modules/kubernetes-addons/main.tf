@@ -278,7 +278,7 @@ module "kube_prometheus_stack" {
 
 module "portworx" {
   count                 = var.enable_portworx ? 1 : 0
-  source                = "github.com/portworx/terraform-eksblueprints-portworx-addon//"
+  source                = "github.com/portworx/terraform-eksblueprints-portworx-addon"
   helm_config           = var.portworx_helm_config
   manage_via_gitops     = var.argocd_manage_add_ons
   addon_context         = local.addon_context
