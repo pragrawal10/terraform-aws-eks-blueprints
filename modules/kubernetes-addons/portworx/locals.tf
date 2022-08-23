@@ -34,7 +34,7 @@ locals {
     kubernetes_namespace        = local.namespace
     create_kubernetes_service_account = true  
     kubernetes_service_account        = "${local.service_account_name}"
-    # irsa_iam_policies = concat([aws_iam_policy.pradyuman_policy_one.arn], var.irsa_policies)
+    irsa_iam_policies = concat([aws_iam_policy.portworx_blueprint_metering.arn], var.irsa_policies)
   }
 
   argocd_gitops_config = {
@@ -64,6 +64,27 @@ locals {
         enableAutopilot             = false
         KVDBauthSecretName          = ""
         eksServiceAccount           = "${local.service_account_name}"
+        useAWSMarketplace           = false
     },var.chart_values)
   )]
+}
+
+
+
+resource "aws_iam_policy" "portworx_blueprint_metering" {
+  name = "portworx_blueprint_metering"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+          Action = [
+            "aws-marketplace:MeterUsage",
+            "aws-marketplace:RegisterUsage"
+          ],
+          Effect = "Allow",
+          Resource = "*"
+      },
+    ]
+  })
 }
