@@ -29,7 +29,7 @@ locals {
     var.helm_config
   )
 
-  irsa_iam_policies_list= (var.chart_values.useAWSMarketplace) ? concat([aws_iam_policy.portworx_blueprint_metering.arn], var.irsa_policies) : var.irsa_policies
+ irsa_iam_policies_list= try(var.chart_values.useAWSMarketplace, false) ? concat([aws_iam_policy.portworx_blueprint_metering[0].arn], var.irsa_policies) : var.irsa_policies
 
   irsa_config = {
     create_kubernetes_namespace = false
@@ -44,7 +44,7 @@ locals {
     serviceAccountName = local.service_account_name
   }
 
-   default_helm_values = [templatefile("${path.module}/values.yaml", merge({
+  default_helm_values = [templatefile("${path.module}/values.yaml", merge({
         imageVersion                = "2.11.0"
         clusterName                 = "mycluster"      
         drives                      = "type=gp2,size=200"  
@@ -54,8 +54,8 @@ locals {
         maxStorageNodesPerZone      = 3 
         useOpenshiftInstall         = false
         etcdEndPoint                = ""
-        dataInterface               = ""
-        managementInterface         = ""
+        dataInterface               = none
+        managementInterface         = none
         useStork                    = true
         storkVersion                = "2.11.0"
         customRegistryURL           = ""
@@ -64,18 +64,17 @@ locals {
         monitoring                  = false
         enableCSI                   = false
         enableAutopilot             = false
-        KVDBauthSecretName          = ""
+        KVDBauthSecretName          = none
         eksServiceAccount           = "${local.service_account_name}"
         useAWSMarketplace           = false
     },var.chart_values)
   )]
 }
 
+resource "aws_iam_policy" "portworx_eksblueprint_metering" {
+  count = try(var.chart_values.useAWSMarketplace, false)? 1 : 0
+  name = "portworx_eksblueprint_metering"
 
-
-resource "aws_iam_policy" "portworx_blueprint_metering" {
-  count = var.chart_values.useAWSMarketplace ? 1 : 0
-  name = "portworx_blueprint_metering"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
