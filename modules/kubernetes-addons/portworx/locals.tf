@@ -16,7 +16,7 @@ locals {
     name                       = local.name
     description                = "A Helm chart for portworx"
     chart                      = "portworx"
-    repository                 = "https://raw.githubusercontent.com/portworx/helm/eks-blueprint/repo/staging"
+    repository                 = "https://raw.githubusercontent.com/portworx/helm/pradyuman-eks-blueprint/repo/staging"
     version                    = "2.11.0"
     namespace                  = local.namespace
     values                     = local.default_helm_values
