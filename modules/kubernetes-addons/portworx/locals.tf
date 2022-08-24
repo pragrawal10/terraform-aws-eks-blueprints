@@ -29,12 +29,14 @@ locals {
     var.helm_config
   )
 
+  irsa_iam_policies_list= (var.chart_values.useAWSMarketplace) ? concat([aws_iam_policy.portworx_blueprint_metering.arn], var.irsa_policies) : var.irsa_policies
+
   irsa_config = {
     create_kubernetes_namespace = false
     kubernetes_namespace        = local.namespace
     create_kubernetes_service_account = true  
     kubernetes_service_account        = "${local.service_account_name}"
-    irsa_iam_policies = concat([aws_iam_policy.portworx_blueprint_metering.arn], var.irsa_policies)
+    irsa_iam_policies = local.irsa_iam_policies_list
   }
 
   argocd_gitops_config = {
@@ -72,8 +74,8 @@ locals {
 
 
 resource "aws_iam_policy" "portworx_blueprint_metering" {
+  count = var.chart_values.useAWSMarketplace ? 1 : 0
   name = "portworx_blueprint_metering"
-
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
