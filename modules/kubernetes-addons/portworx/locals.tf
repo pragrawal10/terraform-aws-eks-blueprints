@@ -29,7 +29,7 @@ locals {
     var.helm_config
   )
 
- irsa_iam_policies_list= try(var.chart_values.useAWSMarketplace, false) ? concat([aws_iam_policy.portworx_blueprint_metering[0].arn], var.irsa_policies) : var.irsa_policies
+ irsa_iam_policies_list= try(var.chart_values.aws.useAWSMarketplace, false) ? concat([aws_iam_policy.portworx_blueprint_metering[0].arn], var.irsa_policies) : var.irsa_policies
 
   irsa_config = {
     create_kubernetes_namespace = false
@@ -54,8 +54,8 @@ locals {
         maxStorageNodesPerZone      = 3 
         useOpenshiftInstall         = false
         etcdEndPoint                = ""
-        dataInterface               = none
-        managementInterface         = none
+        dataInterface               = ""
+        managementInterface         = ""
         useStork                    = true
         storkVersion                = "2.11.0"
         customRegistryURL           = ""
@@ -64,15 +64,17 @@ locals {
         monitoring                  = false
         enableCSI                   = false
         enableAutopilot             = false
-        KVDBauthSecretName          = none
+        KVDBauthSecretName          = ""
         eksServiceAccount           = "${local.service_account_name}"
         useAWSMarketplace           = false
+        awsAccessKeyId              = ""
+        awsSecretAccessKey          = ""
     },var.chart_values)
   )]
 }
 
 resource "aws_iam_policy" "portworx_eksblueprint_metering" {
-  count = try(var.chart_values.useAWSMarketplace, false)? 1 : 0
+  count = try(var.chart_values.aws.useAWSMarketplace, false)? 1 : 0
   name = "portworx_eksblueprint_metering"
 
   policy = jsonencode({

@@ -104,9 +104,12 @@ serviceAccount:
     create: true
     name: 
 
-eksServiceAccount: ${eksServiceAccount}
+aws:  
+  awsMarketplace: ${useAWSMarketplace}
+  eksServiceAccount: ${eksServiceAccount}
+  awsAccessKeyId: ${}
+  awsSecretAccessKey: ${awsSecretAccessKey}
 
-awsMarketplace: ${useAWSMarketplace}
 
 clusterToken:
   create: true                    # Create cluster token
