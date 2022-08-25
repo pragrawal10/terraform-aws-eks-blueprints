@@ -285,8 +285,6 @@ module "portworx" {
   irsa_policies         = var.portworx_irsa_policies
   set_sensitive_values  = var.portworx_set_sensitive_values
   set_values            = var.portworx_set_values
-  aws_access_key_id     = var.portworx_aws_access_key_id
-  aws_secret_access_key = var.portworx_aws_secret_access_key
   chart_values          = var.portworx_chart_values
 }
 

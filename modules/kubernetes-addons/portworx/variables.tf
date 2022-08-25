@@ -22,18 +22,6 @@ variable "set_sensitive_values" {
   default     = []
 }
 
-variable "aws_access_key_id" {
-  description = "aws access key id value"
-  type        = string
-  default     = ""
-}
-
-variable "aws_secret_access_key" {
-  description = "aws secret access key value"
-  type        = string
-  default     = ""
-}
-
 variable "manage_via_gitops" {
   description = "Determines if the add-on should be managed via GitOps"
   type        = bool

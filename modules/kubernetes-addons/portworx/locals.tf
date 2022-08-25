@@ -3,13 +3,7 @@ locals {
   namespace            = "kube-system"
   service_account_name = "${local.name}-sa"
 
-  set_values = try(length(var.aws_access_key_id) > 0, false) ? concat([
-      {
-        name  = "envVars"
-        value = "AWS_ACCESS_KEY_ID=${var.aws_access_key_id};AWS_SECRET_ACCESS_KEY=${var.aws_secret_access_key}"
-      }
-    ],var.set_values): var.set_values
-
+  set_values = var.set_values
   set_sensitive_values = var.set_sensitive_values
 
   default_helm_config = {
